@@ -1,0 +1,12 @@
+{
+  "name": "belajar-nodejs-restful-api",
+  "version": "1.0.0",
+  "description": "Bagian 10: Belajar NodeJS RESTful API",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Helmi Pradita",
+  "license": "ISC",
+  "type": "module"
+}
