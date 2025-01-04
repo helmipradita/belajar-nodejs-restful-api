@@ -1,0 +1,43 @@
+# Node.js
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Env Files
+.env
+.env.local
+
+# Dependency directories
+node_modules/
+
+# Build directories
+dist/
+build/
+
+# Test Coverage
+coverage/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDE/Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# NPM
+package-lock.json
+yarn.lock
+
+# PM2
+pm2-log.log
+pm2-pid.log
+
+# Misc
+*.bak
+*.orig
+*.old
