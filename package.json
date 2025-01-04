@@ -8,5 +8,8 @@
   },
   "author": "Helmi Pradita",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "joi": "^17.13.3"
+  }
 }
