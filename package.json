@@ -4,7 +4,12 @@
   "description": "Bagian 10: Belajar NodeJS RESTful API",
   "main": "src/main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest -i"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
   },
   "author": "Helmi Pradita",
   "license": "ISC",
@@ -17,10 +22,12 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/uuid": "^10.0.0",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "prisma": "^6.1.0"
   }
