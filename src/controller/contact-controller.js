@@ -41,8 +41,26 @@ const update = async (req, res, next) => {
   }
 };
 
+const remove = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const contactId = req.params.contactId;
+    await contactService.remove(user, contactId);
+    // res.status(204).end();
+    // res.status(204).json({
+    //   message: "Contact deleted",
+    // });
+    res.status(200).json({
+      data: "OK",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
 export default {
   create,
   get,
   update,
+  remove,
 };
