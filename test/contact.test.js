@@ -97,3 +97,76 @@ describe("GET /api/contacts/:contactId", function () {
     expect(result.body.errors).toBeDefined();
   });
 });
+
+describe("PUT /api/contacts/:contactId", function () {
+  beforeEach(async () => {
+    await createTestUser();
+    await createTestContact();
+  });
+
+  afterEach(async () => {
+    await removeAllTestContact();
+    await removeTestUser();
+  });
+
+  it("should can update contact", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + testContact.id)
+      .set("Authorization", "test-token")
+      .send({
+        first_name: "helmi",
+        last_name: "pradita",
+        email: "helmipradita@test.com",
+        phone: "081234567890111",
+      });
+
+    logger.info(result.body);
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.id).toBe(testContact.id);
+    expect(result.body.data.first_name).toBe("helmi");
+    expect(result.body.data.last_name).toBe("pradita");
+    expect(result.body.data.email).toBe("helmipradita@test.com");
+    expect(result.body.data.phone).toBe("081234567890111");
+  });
+
+  it("should reject if contact not found", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + (testContact.id + 1))
+      .set("Authorization", "test-token")
+      .send({
+        first_name: "helmi",
+        last_name: "pradita",
+        email: "helmipradita@test.com",
+        phone: "081234567890111",
+      });
+
+    logger.info(result.body);
+
+    expect(result.status).toBe(404);
+    expect(result.body.errors).toBeDefined();
+  });
+
+  it("should reject if request is invalid", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + testContact.id)
+      .set("Authorization", "test-token")
+      .send({
+        first_name: "",
+        last_name: "",
+        email: "helmipradita",
+        phone: "",
+      });
+
+    logger.info(result.body);
+
+    expect(result.status).toBe(400);
+    expect(result.body.errors).toBeDefined();
+  });
+});
