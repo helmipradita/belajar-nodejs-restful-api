@@ -1,4 +1,3 @@
-import { allow } from "joi";
 import { ResponseError } from "../error/response-error.js";
 
 const validate = (schema, request) => {
