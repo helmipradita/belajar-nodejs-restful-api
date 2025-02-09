@@ -289,3 +289,48 @@ describe("DELETE /api/contacts/:contactId/addresses/:addressId", function () {
     expect(result.body.errors).toBeDefined();
   });
 });
+
+describe("GET /api/contacts/:contactId/addresses", function () {
+  beforeEach(async () => {
+    await createTestUser();
+    await createTestContact();
+    await createTestAddress();
+  });
+
+  afterEach(async () => {
+    await removeAllTestAddresses();
+    await removeAllTestContact();
+    await removeTestUser();
+  });
+
+  it("should can list addresses", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .get(`/api/contacts/${testContact.id}/addresses`)
+      .set("Authorization", "test-token");
+
+    expect(result.status).toBe(200);
+    expect(result.body.data).toEqual([
+      {
+        id: expect.any(Number),
+        street: "jalan test",
+        city: "kota test",
+        province: "provinsi test",
+        country: "indonesia",
+        postal_code: "123456",
+      },
+    ]);
+  });
+
+  it("should reject if contact not found", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .get(`/api/contacts/${testContact.id + 1}/addresses`)
+      .set("Authorization", "test-token");
+
+    expect(result.status).toBe(404);
+    expect(result.body.errors).toBeDefined();
+  });
+});
