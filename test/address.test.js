@@ -6,6 +6,8 @@ const {
   removeTestUser,
   removeAllTestAddresses,
   getTestContact,
+  createTestAddress,
+  getTestAddress,
 } = require("./test-util.js");
 import { web } from "../src/application/web.js";
 
@@ -78,6 +80,63 @@ describe("POST /api/contacts/:contactId/addresses", function () {
       });
 
     expect(result.status).toBe(400);
+    expect(result.body.errors).toBeDefined();
+  });
+});
+
+describe("GET /api/contacts/:contactId/addresses/:addressId", function () {
+  beforeEach(async () => {
+    await createTestUser();
+    await createTestContact();
+    await createTestAddress();
+  });
+
+  afterEach(async () => {
+    await removeAllTestAddresses();
+    await removeAllTestContact();
+    await removeTestUser();
+  });
+
+  it("should can get address", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .get(`/api/contacts/${testContact.id}/addresses/${testAddress.id}`)
+      .set("Authorization", "test-token");
+
+    expect(result.status).toBe(200);
+    expect(result.body.data).toEqual({
+      id: testAddress.id,
+      street: testAddress.street,
+      city: testAddress.city,
+      province: testAddress.province,
+      country: testAddress.country,
+      postal_code: testAddress.postal_code,
+    });
+  });
+
+  it("should reject if contact not found", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .get(`/api/contacts/${testContact.id + 1}/addresses/${testAddress.id}`)
+      .set("Authorization", "test-token");
+
+    expect(result.status).toBe(404);
+    expect(result.body.errors).toBeDefined();
+  });
+
+  it("should reject if address not found", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .get(`/api/contacts/${testContact.id}/addresses/${testAddress.id + 1}`)
+      .set("Authorization", "test-token");
+
+    expect(result.status).toBe(404);
     expect(result.body.errors).toBeDefined();
   });
 });
